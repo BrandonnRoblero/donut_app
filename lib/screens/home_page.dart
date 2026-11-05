@@ -1,3 +1,8 @@
+import 'package:donut_app/tab/burger_tab.dart';
+import 'package:donut_app/tab/donut_tab.dart';
+import 'package:donut_app/tab/pancake_tab.dart';
+import 'package:donut_app/tab/pizza_tab.dart';
+import 'package:donut_app/tab/smoothie_tab.dart';
 import 'package:donut_app/utils/my_tab.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late TabController _tabController;
   List<Widget> myTabs = [
     //Donuts tab
     const MyTab(iconPath: 'assets/icons/donut.png', iconName: 'Donuts'),
@@ -67,7 +71,6 @@ class _HomePageState extends State<HomePage> {
             // 3. contenido de las pestañas
             Expanded(
               child: TabBarView(
-                controller: _tabController,
                 children: [
                   DonutTab(),
                   BurgerTab(),
@@ -78,6 +81,47 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             // 4. carrito (cart)
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '2 items| \$45',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          "Delivery charges included",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink[400],
+                    ),
+                    child: Text(
+                      'View cart',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

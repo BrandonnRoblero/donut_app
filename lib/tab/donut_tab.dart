@@ -1,3 +1,4 @@
+import 'package:donut_app/utils/donut_tile.dart';
 import 'package:flutter/material.dart';
 
 class DonutTab extends StatelessWidget {
@@ -10,49 +11,47 @@ class DonutTab extends StatelessWidget {
       'Chocolate',
       '100',
       Colors.brown,
-      "lib/images/chocolate_donut.png",
+      "assets/images/chocolate_donut.png",
       'Starbucks',
     ],
     [
       'Strawberry',
       '89',
       Colors.red,
-      "lib/images/strawberry_donut.png",
+      "assets/images/strawberry_donut.png",
       'Krispy Kreme',
     ],
     [
       'Ice Cream',
       '95',
       Colors.blue,
-      "lib/images/icecream_donut.png",
+      "assets/images/icecream_donut.png",
       "Dunkin' Donuts",
     ],
-    ['Grape', '70', Colors.purple, "lib/images/grape_donut.png", 'Oxxo'],
+    ['Grape', '70', Colors.purple, "assets/images/grape_donut.png", 'Oxxo'],
   ];
-
-  get GrindView => null;
 
   @override
   Widget build(BuildContext context) {
-    return GrindView.builder(
+    return GridView.builder(
       //Se encarga de acomodar elementros dentro del grid
-      grindDeleagete: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         //TAMAÑO DE LACA COLUMNA
-        childAspectRatio: 1.0/1.5,
+        childAspectRatio: 1 / 1.7,
         //CANTIDAD DE COLUMNAS
         crossAxisCount: 2),
         //CANTIDAD DE PRODUCTOS
         itemCount: donutOnSale.length,
         //Lo que se va a construir
-        itemBuilder: DonutTile(
-          donutFlavor: donutOnSale[index][0],
-          donutPrice: donutOnSale[index][1],
-          donutColor: donutOnSale[index][2],
-          donutImagePath: donutOnSale[index][3],
-          donutProvider: donutOnSale[index][4],
-
-        )
+        itemBuilder: (context, index) {
+          return DonutTile(
+            donutFlavor: donutOnSale[index][0],
+            donutPrice: donutOnSale[index][1],
+            donutColor: donutOnSale[index][2],
+            donutImagePath: donutOnSale[index][3],
+            donutProvider: donutOnSale[index][4],
+          );
+        },
       );
-    )
   }
 }
