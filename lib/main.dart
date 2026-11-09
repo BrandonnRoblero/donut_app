@@ -1,9 +1,20 @@
+import 'package:donut_app/utils/cart_provider.dart';
+import 'package:donut_app/utils/fav_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'screens/home_page.dart';
+import 'screens/login.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => FavProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const HomePage(),
+      //La app abre en el Login; Home solo se ve después de iniciar sesión
+      home: const Login(),
       debugShowCheckedModeBanner: false,
     );
   }

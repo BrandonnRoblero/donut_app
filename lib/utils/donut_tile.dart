@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:donut_app/utils/cart_provider.dart';
+import 'package:donut_app/utils/fav_provider.dart';
+import 'package:provider/provider.dart';
 
 class DonutTile extends StatelessWidget {
   final String donutFlavor;
@@ -56,9 +59,12 @@ class DonutTile extends StatelessWidget {
               ],
             ),
             //Imagen de la Dona
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-              child: Image.asset(donutImagePath),
+            //Expanded: la imagen se ajusta al espacio libre y evita el desbordamiento
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                child: Image.asset(donutImagePath),
+              ),
             ),
             //Nombre de la Dona
             Text(
@@ -76,13 +82,56 @@ class DonutTile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.favorite_border_outlined, color: Colors.pink[400]),
-                  Text(
-                    'Add',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
+                  //Corazon: lleno si es favorito, vacio si no
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    style: IconButton.styleFrom(
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    icon: Icon(
+                      context.watch<FavProvider>().isFavorite(donutFlavor)
+                          ? Icons.favorite
+                          : Icons.favorite_border_outlined,
+                      color: Colors.pink[400],
+                    ),
+                    onPressed: () {
+                      context.read<FavProvider>().toggleFavorite(
+                        name: donutFlavor,
+                        imagePath: donutImagePath,
+                        price: double.parse(donutPrice),
+                      );
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<CartProvider>().addItem(
+                        name: donutFlavor,
+                        imagePath: donutImagePath,
+                        price: double.parse(donutPrice),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$donutFlavor agregado al carrito'),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    //Sin relleno extra para que quepa igual que el texto
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      foregroundColor: Colors.black,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: const Text(
+                      'Add',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ],

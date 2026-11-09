@@ -3,8 +3,13 @@ import 'package:donut_app/tab/donut_tab.dart';
 import 'package:donut_app/tab/pancake_tab.dart';
 import 'package:donut_app/tab/pizza_tab.dart';
 import 'package:donut_app/tab/smoothie_tab.dart';
+import 'package:donut_app/screens/cart.dart';
+import 'package:donut_app/screens/fav.dart';
+import 'package:donut_app/screens/login.dart';
+import 'package:donut_app/utils/cart_provider.dart';
 import 'package:donut_app/utils/my_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,9 +42,46 @@ class _HomePageState extends State<HomePage> {
           leading: Icon(Icons.menu, color: Colors.grey),
           //icono de la derecha
           actions: [
+            //Favoritos: abre la pantalla de favoritos
+            IconButton(
+              icon: Icon(Icons.favorite_border, color: Colors.grey),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Fav()),
+                );
+              },
+            ),
+            //Carrito: abre la misma pantalla que "View cart"
+            IconButton(
+              icon: Consumer<CartProvider>(
+                builder: (context, cart, child) => Badge(
+                  label: Text('${cart.totalItems}'),
+                  isLabelVisible: cart.totalItems > 0,
+                  backgroundColor: Colors.pink[400],
+                  child: Icon(Icons.shopping_cart_outlined, color: Colors.grey),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Cart()),
+                );
+              },
+            ),
+            //Sesion: cierra sesión y regresa al Login
             Padding(
-              padding: EdgeInsets.only(right: 24.0),
-              child: Icon(Icons.person, color: Colors.grey),
+              padding: EdgeInsets.only(right: 16.0),
+              child: IconButton(
+                icon: Icon(Icons.person, color: Colors.grey),
+                onPressed: () {
+                  context.read<CartProvider>().clear();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -50,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(left: 24),
               child: Row(
                 children: [
-                  Text('I want to', style: TextStyle(fontSize: 24)),
+                  Text('I want to ', style: TextStyle(fontSize: 24)),
                   Text(
                     'EAT',
                     style: TextStyle(
@@ -92,11 +134,14 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '2 items| \$45',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                        // Se actualiza solo cuando cambia el carrito
+                        Consumer<CartProvider>(
+                          builder: (context, cart, child) => Text(
+                            '${cart.totalItems} items | \$${cart.totalPrice.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                         Text(
@@ -107,7 +152,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Cart()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.pink[400],
                     ),
