@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   //Logo
-                  Image.asset('assets/images/strawberry_donut.png', height: 140),
+                  Image.asset('assets/images/grape_donut.png', height: 140),
                   const SizedBox(height: 24),
 
                   //Titulo

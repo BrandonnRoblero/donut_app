@@ -3,7 +3,7 @@ import 'package:donut_app/utils/fav_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/login.dart';
+import 'screens/splash.dart';
 
 void main() {
   runApp(
@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      //La app abre en el Login; Home solo se ve después de iniciar sesión
-      home: const Login(),
+      //La app abre en el Splash (conexión a Firebase) y luego en el Login
+      home: const Splash(),
       debugShowCheckedModeBanner: false,
     );
   }
