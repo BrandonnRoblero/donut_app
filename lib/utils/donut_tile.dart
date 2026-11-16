@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:donut_app/utils/cart_provider.dart';
+import 'package:donut_app/utils/cloud_image.dart';
 import 'package:donut_app/utils/fav_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +64,7 @@ class DonutTile extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                child: Image.asset(donutImagePath),
+                child: CloudImage(donutImagePath),
               ),
             ),
             //Nombre de la Dona

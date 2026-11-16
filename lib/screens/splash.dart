@@ -1,9 +1,11 @@
 import 'package:donut_app/firebase_options.dart';
 import 'package:donut_app/screens/home_page.dart';
 import 'package:donut_app/screens/login.dart';
+import 'package:donut_app/utils/supabase_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 //Pantalla de carga: conecta la app con Firebase antes de abrir el Login
 class Splash extends StatefulWidget {
@@ -33,6 +35,15 @@ class _SplashState extends State<Splash> {
       if (Firebase.apps.isEmpty) {
         await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform,
+        );
+      }
+      //Conexión con Supabase (de ahí salen las imágenes de los productos)
+      try {
+        Supabase.instance;
+      } catch (_) {
+        await Supabase.initialize(
+          url: SupabaseConfig.url,
+          publishableKey: SupabaseConfig.publishableKey,
         );
       }
       if (!mounted) return;

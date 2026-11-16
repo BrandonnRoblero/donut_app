@@ -1,5 +1,6 @@
 import 'package:donut_app/screens/cart.dart';
 import 'package:donut_app/utils/cart_provider.dart';
+import 'package:donut_app/utils/cloud_image.dart';
 import 'package:donut_app/utils/fav_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -115,7 +116,7 @@ class Fav extends StatelessWidget {
                                       color: Colors.pink[50],
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    child: Image.asset(item.imagePath),
+                                    child: CloudImage(item.imagePath),
                                   ),
                                   const SizedBox(width: 12),
                                   //Nombre y precio
