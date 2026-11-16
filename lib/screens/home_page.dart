@@ -6,6 +6,7 @@ import 'package:donut_app/tab/smoothie_tab.dart';
 import 'package:donut_app/screens/cart.dart';
 import 'package:donut_app/screens/fav.dart';
 import 'package:donut_app/screens/login.dart';
+import 'package:donut_app/screens/resenas.dart';
 import 'package:donut_app/utils/auth_service.dart';
 import 'package:donut_app/utils/cart_provider.dart';
 import 'package:donut_app/utils/my_tab.dart';
@@ -43,6 +44,16 @@ class _HomePageState extends State<HomePage> {
           leading: Icon(Icons.menu, color: Colors.grey),
           //icono de la derecha
           actions: [
+            //Reseñas: formulario y lista en tiempo real (Firestore)
+            IconButton(
+              icon: Icon(Icons.rate_review_outlined, color: Colors.grey),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Resenas()),
+                );
+              },
+            ),
             //Favoritos: abre la pantalla de favoritos
             IconButton(
               icon: Icon(Icons.favorite_border, color: Colors.grey),

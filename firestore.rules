@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Reseñas: solo usuarios con sesión pueden leer y escribir
+    match /resenas/{resenaId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.nombre is string
+        && request.resource.data.nombre.size() > 0
+        && request.resource.data.texto is string
+        && request.resource.data.texto.size() > 0
+        && request.resource.data.uid == request.auth.uid;
+    }
+    // Todo lo demás está bloqueado
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
