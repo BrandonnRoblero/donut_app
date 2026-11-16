@@ -1,6 +1,8 @@
 import 'package:donut_app/screens/home_page.dart';
 import 'package:donut_app/utils/auth.dart';
+import 'package:donut_app/utils/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -19,6 +21,8 @@ class _LoginState extends State<Login> {
   bool _hidePassword = true;
   //Mensaje si el correo o la contraseña son incorrectos
   String? _errorMessage;
+  //Cargando mientras se inicia sesión con Google
+  bool _googleLoading = false;
 
   @override
   void dispose() {
@@ -41,6 +45,34 @@ class _LoginState extends State<Login> {
     } else {
       setState(() => _errorMessage = 'Correo o contraseña incorrectos');
     }
+  }
+
+  //Inicio de sesión con Google
+  Future<void> _loginWithGoogle() async {
+    setState(() => _googleLoading = true);
+    try {
+      final user = await AuthService.signInWithGoogle();
+      if (!mounted || user == null) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } on GoogleSignInException catch (e) {
+      //Si el usuario cerró la ventana de Google no mostramos error
+      if (e.code != GoogleSignInExceptionCode.canceled && mounted) {
+        _showError('No se pudo iniciar sesión con Google');
+      }
+    } catch (e) {
+      if (mounted) _showError('Error: $e');
+    } finally {
+      if (mounted) setState(() => _googleLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
   }
 
   //Estilo de los campos de texto
@@ -191,6 +223,63 @@ class _LoginState extends State<Login> {
                         color: Colors.white,
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  //Separador "o"
+                  Row(
+                    children: [
+                      Expanded(child: Divider(color: Colors.grey[400])),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          'o',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      ),
+                      Expanded(child: Divider(color: Colors.grey[400])),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  //Boton Continuar con Google
+                  OutlinedButton(
+                    onPressed: _googleLoading ? null : _loginWithGoogle,
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      side: BorderSide(color: Colors.grey.shade300, width: 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: _googleLoading
+                        ? SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              color: Colors.pink[400],
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/icons/google.png',
+                                height: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'Continuar con Google',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
+                          ),
                   ),
                 ],
               ),

@@ -6,6 +6,7 @@ import 'package:donut_app/tab/smoothie_tab.dart';
 import 'package:donut_app/screens/cart.dart';
 import 'package:donut_app/screens/fav.dart';
 import 'package:donut_app/screens/login.dart';
+import 'package:donut_app/utils/auth_service.dart';
 import 'package:donut_app/utils/cart_provider.dart';
 import 'package:donut_app/utils/my_tab.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +75,11 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.only(right: 16.0),
               child: IconButton(
                 icon: Icon(Icons.person, color: Colors.grey),
-                onPressed: () {
+                onPressed: () async {
                   context.read<CartProvider>().clear();
+                  //Cierra también la sesión de Google / Firebase
+                  await AuthService.signOut();
+                  if (!context.mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const Login()),

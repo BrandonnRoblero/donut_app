@@ -1,5 +1,7 @@
 import 'package:donut_app/firebase_options.dart';
+import 'package:donut_app/screens/home_page.dart';
 import 'package:donut_app/screens/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -36,12 +38,16 @@ class _SplashState extends State<Splash> {
       if (!mounted) return;
       setState(() => _loading = false);
 
-      //Muestra "Conectado" un momento y luego abre el Login
+      //Muestra "Conectado" un momento y luego:
+      //si ya hay sesión de Google abre Home, si no abre el Login
       await Future.delayed(const Duration(milliseconds: 1500));
       if (!mounted) return;
+      final bool loggedIn = FirebaseAuth.instance.currentUser != null;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Login()),
+        MaterialPageRoute(
+          builder: (context) => loggedIn ? const HomePage() : const Login(),
+        ),
       );
     } catch (e) {
       if (!mounted) return;
